@@ -3,6 +3,7 @@
 #include <vector>
 #include<sstream>
 #include <string>
+#include <numeric>
 using namespace std;
 
 class SecShift {
@@ -290,10 +291,12 @@ int captureNumber(string myText,int currentFlag){
     return currentFlag;
 }
 
-int eval_func(vector<vector<vector<int>>> x_edt, vector<vector<vector<int>>> q_edt, vector<int> l_t, vector<int> b_e, vector<vector<vector<int>>> p_edt,vector<vector<int>> s_dt,vector<vector<int>> u_dt, vector<vector<int>> v_dt){
+int eval_func(vector<vector<vector<int>>> x_edt, vector<vector<vector<int>>> q_edt, vector<int> l_t, vector<int> b_e, vector<int> o_e,vector<int> f_e, vector<vector<vector<int>>> p_edt,vector<vector<int>> s_dt,vector<vector<int>> u_dt, vector<vector<int>> v_dt){
     int suma1 = 0;
     int suma2 = 0;
     int suma3 = 0;
+    int suma4 = 0;
+    int suma5 = 0;
     int temp = 0;
     vector<vector<int>> y_dt(days,vector<int>(SECTION_SHIFTS.size()));//below
     vector<vector<int>> z_dt(days,vector<int>(SECTION_SHIFTS.size()));//above
@@ -331,10 +334,36 @@ int eval_func(vector<vector<vector<int>>> x_edt, vector<vector<vector<int>>> q_e
             }
         }
         if (b_e[i] > temp){
-            suma3 = suma3 + (b_e[i] - temp)*100;
+            suma3 = suma3 + (b_e[i] - temp)*10;
         }
     }
-    return suma1 + suma2 + suma3;
+    temp = 0;
+    for (int i = 0; i < x_edt.size(); i++){
+        for (int j = 0;j < x_edt[i].size(); j++){
+            if (accumulate(x_edt[i][j].begin(), x_edt[i][j].end(), 0) == 0){
+                temp++;
+            }else{
+                if (temp < o_e[i]){
+                    suma4 = suma4 + (o_e[i] - temp)*10;
+                }
+                temp = 0;
+            }
+        }
+    }
+    temp = 0;
+    for (int i = 0; i < x_edt.size(); i++){
+        for (int j = 0;j < x_edt[i].size(); j++){
+            if (accumulate(x_edt[i][j].begin(), x_edt[i][j].end(), 0) == 1){
+                temp++;
+            }else{
+                if (temp < f_e[i] && temp != 0){
+                    suma5 = suma5 + (f_e[i] - temp)*10;
+                }
+                temp = 0;
+            }
+        }
+    }
+    return suma1 + suma2 + suma3 + suma4 + suma5;
 }
 
 vector<vector<vector<int>>> movimiento(int empleado, int dia, int turno, vector<vector<vector<int>>> x_edt){
@@ -356,7 +385,7 @@ vector<vector<vector<int>>> movimiento(int empleado, int dia, int turno, vector<
     return x_edt;
 }
 
-bool valid(vector<vector<vector<int>>> x_edt, vector<vector<int>> R_t, vector<vector<int>> m_et, vector<int> l_t, vector<int> a_e, vector<int> c_e, vector<vector<int>> N_e){
+bool valid(vector<vector<vector<int>>> x_edt, vector<vector<int>> R_t, vector<vector<int>> m_et, vector<int> l_t, vector<int> a_e, vector<int> c_e, vector<int> g_e, vector<vector<int>> N_e){
     int suma = 0;
 
     //RESTRICCION DE ROTACION DE TURNOS (EJ: TURNO A NO PUEDE SER ASIGNADO LUEGO DE B AL DIA SIGUIENTE)
@@ -390,6 +419,7 @@ bool valid(vector<vector<vector<int>>> x_edt, vector<vector<int>> R_t, vector<ve
                 suma = suma + x_edt[i][j][k];
             }
             if (suma >  m_et[i][k]){
+                //cout << "aca 3" << endl;
                 return false;
             }
             suma = 0;
@@ -404,22 +434,34 @@ bool valid(vector<vector<vector<int>>> x_edt, vector<vector<int>> R_t, vector<ve
             }
         }
         if (suma > c_e[i]){
+            //cout << "aca 4" << endl;
             return false;
         }
         suma = 0;
     }
+    suma = 0;
     // REATRICCION MAXIMOS TURNOS CONSECUTIVOS
-    // for (int i = 0; i < x_edt.size(); i++){
-    //     for (int j = 0;j <  x_edt[i].size() - g_e[i]; j++){
-    //         suma = 0;
-    //         int c = 1;
-    //         for (int k = 0;k < x_edt[i][j].size(); k++){
-    //             while (j+c < g_e[i]){
-    //                 suma = suma + x_edt[]
-    //             }
-    //         }
-    //     }
-    // }
+    for (int i = 0; i < x_edt.size(); i++){
+        for (int j = 0;j <  x_edt[i].size(); j++){
+            if (accumulate(x_edt[i][j].begin(), x_edt[i][j].end(), 0) == 1){
+                suma = suma + 1;
+                if (suma > g_e[i]){
+                    if (j == 12 || j ==13){
+                                //cout << "aca 5" << endl;
+                            }
+                    return false;
+                }
+            } else {
+                if (suma > g_e[i]){
+                    if (j == 12 || j ==13){
+                                //cout << "aca 5.1" << endl;
+                            }
+                    return false;
+                }
+                suma = 0;
+            }
+        }
+    }
 
     //RESTRICCION NUMERO MAXIMO DE FINES DE SEMANA TRABAJADOS
     suma = 0;
@@ -433,6 +475,7 @@ bool valid(vector<vector<vector<int>>> x_edt, vector<vector<int>> R_t, vector<ve
             }
         }
         if (suma > a_e[i]){
+            //cout << "aca 6" << endl;
             return false;
         }
         suma = 0;
@@ -440,12 +483,21 @@ bool valid(vector<vector<vector<int>>> x_edt, vector<vector<int>> R_t, vector<ve
     return true;
 }
 
+bool inTabu(int i,int j, int k,vector<vector<int>> tabu_list){
+    for (int a = 0; a < tabu_list.size();a++){
+        if (tabu_list[a][0] == i && tabu_list[a][1] == j && tabu_list[a][2] == k){
+            return true;
+        }
+    }
+    return false;
+}
+
 int main() {
     string myText;
     int captureFlag = 0;
     int oldFlag = 0;
     //Inicio Capturador de Instancia
-    ifstream MyReadFile("instance17.txt");
+    ifstream MyReadFile("instance1.txt");
     while (getline (MyReadFile, myText)) {
         if(myText.find("#") != 0 and !(myText.empty())){
             oldFlag = captureFlag;
@@ -525,12 +577,16 @@ int main() {
         shiftindex = shiftIndex(SECTION_SHIFT_ON_REQUESTS[i].shiftId);
         q_edt[empindex][SECTION_SHIFT_ON_REQUESTS[i].day][shiftindex] = SECTION_SHIFT_ON_REQUESTS[i].weigth;
     }
+    temp.clear();
     for (int i = 0; i < SECTION_DAYS_OFF.size(); i++){
         empindex = empIndex(SECTION_DAYS_OFF[i].id);
         for (int j = 0; j < SECTION_DAYS_OFF[i].DO.size(); j++){
-            N_e[empindex][SECTION_DAYS_OFF[i].DO[j]] = 1;
+            temp.push_back(SECTION_DAYS_OFF[i].DO[j]);
         }
+        N_e[empindex] = temp;
+        temp.clear();
     }
+    temp.clear();
     for (int i = 0; i < SECTION_SHIFTS.size(); i++){
         if (SECTION_SHIFTS[i].notfollowthis.size() == 0){
             temp.push_back(-1);
@@ -582,19 +638,21 @@ int main() {
         v_dt[SECTION_COVER[i].day][shiftindex] = SECTION_COVER[i].over;
     }
     
-    int global_best_score = eval_func(x_edt, q_edt,l_t,b_e, p_edt, s_dt, u_dt, v_dt);
+    int global_best_score = eval_func(x_edt, q_edt,l_t,b_e, o_e, f_e, p_edt, s_dt, u_dt, v_dt);
     vector<vector<vector<int>>> global_solution;
-    int local_best_score = eval_func(x_edt, q_edt,l_t,b_e, p_edt, s_dt, u_dt, v_dt);
+    int local_best_score = eval_func(x_edt, q_edt,l_t,b_e, o_e, f_e, p_edt, s_dt, u_dt, v_dt);
     int current_score;
+    
     cout << global_best_score << endl;
     //CONSTRUCCION DE SOLUCION INICIAL CON GREEDY
     vector<vector<vector<int>>> current_move;
+    vector<vector<vector<int>>> next_move;
     for (int i = 0; i < x_edt.size(); i++){
-        for (int j = 0;j <  x_edt[i].size() - 1; j++){
+        for (int j = 0;j <  x_edt[i].size(); j++){
             for (int k = 0;k < x_edt[i][j].size(); k++){
                 current_move = movimiento(i, j, k, x_edt);
-                if (valid(current_move, R_t, m_et, l_t, a_e, c_e, N_e)){
-                    current_score = eval_func(current_move, q_edt,l_t,b_e, p_edt, s_dt, u_dt, v_dt);
+                if (valid(current_move, R_t, m_et, l_t, a_e, c_e, g_e, N_e)){
+                    current_score = eval_func(current_move, q_edt,l_t,b_e, o_e, f_e, p_edt, s_dt, u_dt, v_dt);
                     if (current_score < local_best_score){
                         x_edt = current_move;
                         local_best_score = current_score;
@@ -609,7 +667,7 @@ int main() {
     }
     for (int k = 0; k < x_edt[0][0].size();k++){
         for (int i = 0; i < x_edt.size(); i++){
-            for (int j = 0;j <  x_edt[i].size() - 1; j++){
+            for (int j = 0;j <  x_edt[i].size(); j++){
                 cout << x_edt[i][j][k] << " ";
             }
             cout << endl;
@@ -617,5 +675,55 @@ int main() {
         cout << endl;
     }
     cout << global_best_score << endl;
+
+
+    int tabu_size = (x_edt.size() * x_edt[0].size() * x_edt[0][0].size())/2;
+    vector<vector<int>> tabu_list;
+    int iter = 1000;
+
+
+    // TABUU SEARCH
+    for (int n = 0; n < iter; n++){
+        local_best_score = 99999999;
+        for (int i = 0; i < x_edt.size(); i++){
+            for (int j = 0;j <  x_edt[i].size(); j++){
+                for (int k = 0;k < x_edt[i][j].size(); k++){
+                    current_move = movimiento(i, j, k, x_edt);
+                    if (valid(current_move, R_t, m_et, l_t, a_e, c_e, g_e, N_e) && !inTabu(i,j,k,tabu_list)){
+                        current_score = eval_func(current_move, q_edt,l_t,b_e, o_e, f_e, p_edt, s_dt, u_dt, v_dt);
+                        if (current_score < local_best_score){
+                            temp.clear();
+                            temp.push_back(i);
+                            temp.push_back(j);
+                            temp.push_back(k);
+                            next_move = current_move;
+                            local_best_score = current_score;
+                        }
+                        if (current_score < global_best_score){
+                            global_solution = current_move;
+                            global_best_score = current_score;
+                        }
+                    }
+                }
+            }
+        }
+        if (tabu_list.size() >= tabu_size){
+            tabu_list.erase(tabu_list.begin());
+        }
+        tabu_list.push_back(temp);
+        x_edt = next_move;
+    }
+
+    for (int k = 0; k < global_solution[0][0].size();k++){
+        for (int i = 0; i < global_solution.size(); i++){
+            for (int j = 0;j <  global_solution[i].size(); j++){
+                cout << global_solution[i][j][k] << " ";
+            }
+            cout << endl;
+        }
+        cout << endl;
+    }
+    cout << global_best_score << endl;
+
     return 0;
 }
