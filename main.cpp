@@ -193,7 +193,7 @@ int main(int argc, char const *argv[]) {
             for (int j = 0;j <  x_edt[i].size(); j++){
                 for (int k = 0;k < x_edt[i][j].size(); k++){
                     current_move = movimiento(i, j, k, x_edt);
-                    if (valid(true, current_move, R_t, m_et, l_t, a_e, c_e, g_e, N_e)){
+                    if (valid(true, current_move, R_t, m_et, l_t, a_e, b_e, o_e, f_e , c_e, g_e, N_e)){
                         current_score = greedy_val(current_move,b_e,o_e,f_e,l_t);
                         if (current_score < local_best_score){
                             next_move = current_move;
@@ -217,7 +217,7 @@ int main(int argc, char const *argv[]) {
             for (int j = 0;j <  x_edt[i].size(); j++){
                 for (int k = 0;k < x_edt[i][j].size(); k++){
                     current_move = movimiento(i, j, k, x_edt);
-                    if (valid(false, current_move, R_t, m_et, l_t, a_e, c_e, g_e, N_e) && !inTabu(i,j,k,tabu_list)){
+                    if (valid(false, current_move, R_t, m_et, l_t, a_e, b_e, o_e, f_e , c_e, g_e, N_e) && !inTabu(i,j,k,tabu_list)){
                         current_score = eval_func(days, SECTION_SHIFTS, current_move, q_edt,l_t,b_e, o_e, f_e, p_edt, s_dt, u_dt, v_dt);
                         if (current_score < local_best_score){
                             temp.clear();
