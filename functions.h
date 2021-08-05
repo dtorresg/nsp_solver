@@ -35,6 +35,6 @@ int eval_func(int days, vector<SecShift> SECTION_SHIFTS, vector<vector<vector<in
 
 vector<vector<vector<int>>> movimiento(int empleado, int dia, int turno, vector<vector<vector<int>>> x_edt);
 
-bool valid(bool greedy,vector<vector<vector<int>>> x_edt, vector<vector<int>> R_t, vector<vector<int>> m_et, vector<int> l_t, vector<int> a_e, vector<int> c_e, vector<int> g_e, vector<vector<int>> N_e);
+bool valid(bool greedy, vector<vector<vector<int>>> x_edt, vector<vector<int>> R_t, vector<vector<int>> m_et, vector<int> l_t, vector<int> a_e, vector<int> c_e, vector<int> g_e, vector<vector<int>> N_e);
 
 bool inTabu(int i,int j, int k,vector<vector<int>> tabu_list);
