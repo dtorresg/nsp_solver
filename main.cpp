@@ -234,8 +234,8 @@ int main(int argc, char const *argv[]) {
         tabu_list.push_back(temp);
         x_edt = next_move;
         auto now =  std::chrono::high_resolution_clock::now();
-        auto timeout = std::chrono::duration_cast<std::chrono::seconds>(now - begin);
-        if (timeout.count() >= 3){
+        auto timeout = std::chrono::duration_cast<std::chrono::nanoseconds>(now - begin);
+        if (timeout.count() >= 3.0){
             cout << "timeout" << endl;
             break;
         }
