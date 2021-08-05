@@ -309,7 +309,7 @@ int main(int argc, char const *argv[]) {
             }
         }
         if (b_e[i] > test){
-            cout << "No cumple con el mínimo de minutos de trabajo para el empleado " << SECTION_STAFF[i].id << endl;
+            cout << "- No cumple con el mínimo de minutos de trabajo para el empleado " << SECTION_STAFF[i].id << endl;
         }
     }
     test = 0;
@@ -319,7 +319,7 @@ int main(int argc, char const *argv[]) {
                 test++;
             }else{
                 if (test < o_e[i] && test != 0){
-                    cout << "No cumple con el mínimo de dias libres consecutivos para el empleado " << SECTION_STAFF[i].id << endl;
+                    cout << "- No cumple con el mínimo de dias libres consecutivos para el empleado " << SECTION_STAFF[i].id << endl;
                 }
                 test = 0;
             }
@@ -332,11 +332,12 @@ int main(int argc, char const *argv[]) {
                 test++;
             }else{
                 if (test < f_e[i] && test != 0){
-                    cout << "No cumple con el mínimo de turnos consecutivos para el empleado " << SECTION_STAFF[i].id << endl;
+                    cout << "- No cumple con el mínimo de turnos consecutivos para el empleado " << SECTION_STAFF[i].id << endl;
                 }
                 test = 0;
             }
         }
     }
+    cout << endl;
     return 0;
 }
