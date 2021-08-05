@@ -80,7 +80,7 @@ int main(int argc, char const *argv[]) {
     }
 
     //ELEMENTOS DEL MODELO
-    vector<vector<vector<int>>> x_edt(SECTION_STAFF.size(), vector<vector<int>>(days, vector<int>(max,1))); // 1 si el empleado e es asignado el dia d al turno t
+    vector<vector<vector<int>>> x_edt(SECTION_STAFF.size(), vector<vector<int>>(days, vector<int>(max))); // 1 si el empleado e es asignado el dia d al turno t
     vector<vector<int>> R_t(SECTION_SHIFTS.size(),vector<int>(1)); // Conjunto de los tipos de turno que no pueden ser asignados inmediatamente luego del turno de tipo t
     vector<vector<int>> N_e(SECTION_STAFF.size(),vector<int>(days)); // Dias en que el empleado e no puede ser asignado
     vector<int> l_t(SECTION_SHIFTS.size()); // Largo del turno t en minutos
