@@ -186,16 +186,17 @@ int main(int argc, char const *argv[]) {
     }
     int iter = stoi(argv[2]);
     auto begin = std::chrono::high_resolution_clock::now();
-
+    bool valido = false;
     //CONSTRUCCION DE SOLUCION INICIAL CON GREEDY
-    for (int i = 0; i < x_edt.size(); i++){
-        for (int j = 0;j <  x_edt[i].size(); j++){
-            for (int k = 0;k < x_edt[i][j].size(); k++){
-                current_move = movimiento(i, j, k, x_edt);
-                if (valid(true,current_move, R_t, m_et, l_t, a_e,b_e,o_e,f_e, c_e, g_e, N_e)){
+    while(!valido){
+        for (int i = 0; i < x_edt.size(); i++){
+            local_best_score = 999999999;
+            for (int j = 0;j <  x_edt[i].size(); j++){
+                for (int k = 0;k < x_edt[i][j].size(); k++){
+                    current_move = movimiento(i, j, k, x_edt);
                     current_score = eval_func(days, SECTION_SHIFTS, current_move, q_edt,l_t, p_edt, s_dt, u_dt, v_dt);
                     if (current_score < local_best_score){
-                        x_edt = current_move;
+                        next_move = current_move;
                         local_best_score = current_score;
                     }
                     if (current_score < global_best_score){
@@ -203,8 +204,10 @@ int main(int argc, char const *argv[]) {
                         global_best_score = current_score;
                     }
                 }
+                x_edt = next_move;
             }
         }
+        valido = valid(false,current_move, R_t, m_et, l_t, a_e,b_e,o_e,f_e, c_e, g_e, N_e)
     }
 
     // TABUU SEARCH
