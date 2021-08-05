@@ -209,7 +209,7 @@ int main(int argc, char const *argv[]) {
         }
         x_edt = next_move;
     }
-    cout << valid(false, current_move, R_t, m_et, l_t, a_e, b_e, o_e, f_e , c_e, g_e, N_e) << endl;
+    global_best_score = eval_func(days, SECTION_SHIFTS, x_edt, q_edt,l_t,b_e, o_e, f_e, p_edt, s_dt, u_dt, v_dt);
     // TABUU SEARCH
     for (int n = 0; n < iter; n++){
         local_best_score = 999999999;
