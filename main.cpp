@@ -243,7 +243,7 @@ int main(int argc, char const *argv[]) {
         auto now =  std::chrono::high_resolution_clock::now();
         auto timeout = std::chrono::duration_cast<std::chrono::seconds>(now - begin);
         if (timeout.count() >= 7200){
-            cout << "Timeout: Límite de 2 horas superado" << endl;
+            std::cout << "Timeout: Límite de 2 horas superado" << endl;
             break;
         }
     }
@@ -251,97 +251,18 @@ int main(int argc, char const *argv[]) {
     auto elapsed = std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin);
 
     for (int i = 0; i < x_edt.size();i++){
-        cout << SECTION_STAFF[i].id << ": ";
+        std::cout << SECTION_STAFF[i].id << ": ";
         for (int j = 0; j < x_edt[i].size();j++){
             for (int k = 0; k < x_edt[i][j].size();k++){
                 if (x_edt[i][j][k] == 1){
-                    cout << "(" << j << "," << SECTION_SHIFTS[k].name << ") ";
+                    std::cout << "(" << j << "," << SECTION_SHIFTS[k].name << ") ";
                 }
             }
         }
-        cout << endl;
-    }
-    int test = 0;
-    for (int i = 0; i < global_solution.size(); i++){
-        for (int j = 0;j < global_solution[i].size(); j++){
-            for (int k = 0;k < global_solution[i][j].size(); k++){
-                test = test + global_solution[i][j][k]*l_t[k];
-            }
-        }
-        if (b_e[i] > test){
-            global_best_score = global_best_score - (b_e[i] - test)*500;
-        }
-        test = 0;
-    }
-    test = 0;
-    for (int i = 0; i < global_solution.size(); i++){
-        for (int j = 0;j < global_solution[i].size(); j++){
-            if (accumulate(global_solution[i][j].begin(), global_solution[i][j].end(), 0) == 0){
-                test++;
-            }else{
-                if (test < o_e[i] && test != 0){
-                    global_best_score = global_best_score - (o_e[i] - test)*1000;
-                }
-                test = 0;
-            }
-        }
-    }
-    test = 0;
-    for (int i = 0; i < global_solution.size(); i++){
-        for (int j = 0;j < global_solution[i].size(); j++){
-            if (accumulate(global_solution[i][j].begin(), global_solution[i][j].end(), 0) == 1){
-                test++;
-            }else{
-                if (test < f_e[i] && test != 0){
-                    global_best_score = global_best_score - (f_e[i] - test)*500;
-                }
-                test = 0;
-            }
-        }
+        std::cout << endl;
     }
 
-    cout << "Suma de penalizaciones: " << global_best_score << endl;
-    printf("Tiempo total de ejecución: %.3f [s]\n", elapsed.count() * 1e-9);
-
-    cout << "\n-------------------------------------\n Información Adicional \n-------------------------------------\n" << endl;
-    test = 0;
-    for (int i = 0; i < global_solution.size(); i++){
-        for (int j = 0;j < global_solution[i].size(); j++){
-            for (int k = 0;k < global_solution[i][j].size(); k++){
-                test = test + global_solution[i][j][k]*l_t[k];
-            }
-        }
-        if (b_e[i] > test){
-            cout << "- No cumple con el mínimo de minutos de trabajo para el empleado " << SECTION_STAFF[i].id << endl;
-        }
-        test = 0;
-    }
-    test = 0;
-    for (int i = 0; i < global_solution.size(); i++){
-        for (int j = 0;j < global_solution[i].size(); j++){
-            if (accumulate(global_solution[i][j].begin(), global_solution[i][j].end(), 0) == 0){
-                test++;
-            }else{
-                if (test < o_e[i] && test != 0){
-                    cout << "- No cumple con el mínimo de dias libres consecutivos para el empleado " << SECTION_STAFF[i].id << endl;
-                }
-                test = 0;
-            }
-        }
-    }
-    test = 0;
-    for (int i = 0; i < global_solution.size(); i++){
-        for (int j = 0;j < global_solution[i].size(); j++){
-            if (accumulate(global_solution[i][j].begin(), global_solution[i][j].end(), 0) == 1){
-                test++;
-            }else{
-                if (test < f_e[i] && test != 0){
-                    cout << "- No cumple con el mínimo de turnos consecutivos para el empleado " << SECTION_STAFF[i].id << endl;
-                }
-                test = 0;
-            }
-        }
-    }
-    cout << endl;
+    std::cout << "Suma de penalizaciones: " << global_best_score << endl;
+    std::printf("Tiempo total de ejecución: %.3f [s]\n", elapsed.count() * 1e-9);
     return 0;
 }
