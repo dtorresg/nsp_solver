@@ -191,7 +191,7 @@ int main(int argc, char const *argv[]) {
                 if (valid(current_move, R_t, m_et, l_t, a_e, c_e, g_e, N_e)){
                     current_score = eval_func(days, SECTION_SHIFTS, current_move, q_edt,l_t, o_e, f_e, p_edt, s_dt, u_dt, v_dt);
                     if (current_score < local_best_score){
-                        x_edt = current_move;
+                        next_move = current_move;
                         local_best_score = current_score;
                     }
                     if (current_score < global_best_score){
@@ -200,6 +200,7 @@ int main(int argc, char const *argv[]) {
                     }
                 }
             }
+            x_edt = next_move;
         }
     }
 
