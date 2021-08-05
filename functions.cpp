@@ -391,6 +391,7 @@ int greedy_val(vector<vector<vector<int>>> x_edt, vector<int> b_e, vector<int> o
     int suma3 = 0;
     int suma4 = 0;
     int suma5 = 0;
+    cout << "hola" << endl;
     for (int i = 0; i < x_edt.size(); i++){
         for (int j = 0;j < x_edt[i].size(); j++){
             for (int k = 0;k < x_edt[i][j].size(); k++){
@@ -398,7 +399,7 @@ int greedy_val(vector<vector<vector<int>>> x_edt, vector<int> b_e, vector<int> o
             }
         }
         if (b_e[i] > temp){
-            suma3 = suma3 + (b_e[i] - temp)*500;
+            suma3 = suma3 + (b_e[i] - temp)*1;
         }
         temp = 0;
     }
@@ -409,7 +410,7 @@ int greedy_val(vector<vector<vector<int>>> x_edt, vector<int> b_e, vector<int> o
                 temp++;
             }else{
                 if (temp < o_e[i] && temp != 0){
-                    suma4 = suma4 + (o_e[i] - temp)*1000;
+                    suma4 = suma4 + (o_e[i] - temp)*1;
                 }
                 temp = 0;
             }
@@ -422,7 +423,7 @@ int greedy_val(vector<vector<vector<int>>> x_edt, vector<int> b_e, vector<int> o
                 temp++;
             }else{
                 if (temp < f_e[i] && temp != 0){
-                    suma5 = suma5 + (f_e[i] - temp)*500;
+                    suma5 = suma5 + (f_e[i] - temp)*1;
                 }
                 temp = 0;
             }
