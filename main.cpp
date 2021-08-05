@@ -268,6 +268,7 @@ int main(int argc, char const *argv[]) {
         if (b_e[i] > test){
             global_best_score = global_best_score - (b_e[i] - test)*1000;
         }
+        test = 0;
     }
     test = 0;
     for (int i = 0; i < global_solution.size(); i++){
