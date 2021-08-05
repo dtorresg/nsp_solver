@@ -272,8 +272,6 @@ int eval_func(int days, vector<SecShift> SECTION_SHIFTS, vector<vector<vector<in
 }
 
 vector<vector<vector<int>>> movimiento(int empleado, int dia, int turno, vector<vector<vector<int>>> x_edt){
-    bool swap = false;
-    bool bitflip = false;
     for (int k = 0; k < x_edt[empleado][dia].size();k++){
         if (x_edt[empleado][dia][k] == 1){
             if (k == turno){
