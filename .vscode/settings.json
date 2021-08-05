@@ -8,6 +8,7 @@
         "initializer_list": "cpp",
         "utility": "cpp",
         "vector": "cpp",
-        "numeric": "cpp"
+        "numeric": "cpp",
+        "chrono": "cpp"
     }
 }

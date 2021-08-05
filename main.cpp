@@ -171,15 +171,16 @@ int main(int argc, char const *argv[]) {
         v_dt[SECTION_COVER[i].day][shiftindex] = SECTION_COVER[i].over;
     }
     
-    int global_best_score = eval_func(days, SECTION_SHIFTS, x_edt, q_edt,l_t,b_e, o_e, f_e, p_edt, s_dt, u_dt, v_dt);
+
     vector<vector<vector<int>>> global_solution;
+    vector<vector<vector<int>>> current_move;
+    vector<vector<vector<int>>> next_move;
+    vector<vector<int>> tabu_list;
+    int global_best_score = eval_func(days, SECTION_SHIFTS, x_edt, q_edt,l_t,b_e, o_e, f_e, p_edt, s_dt, u_dt, v_dt);
     int local_best_score = eval_func(days, SECTION_SHIFTS, x_edt, q_edt,l_t,b_e, o_e, f_e, p_edt, s_dt, u_dt, v_dt);
     int current_score;
     int tabu_size = (x_edt.size() * x_edt[0].size() * x_edt[0][0].size())/2 + (x_edt.size() * x_edt[0].size() * x_edt[0][0].size())/4;
-    vector<vector<int>> tabu_list;
     int iter = stoi(argv[2]);
-    vector<vector<vector<int>>> current_move;
-    vector<vector<vector<int>>> next_move;
 
     auto begin = std::chrono::high_resolution_clock::now();
     //CONSTRUCCION DE SOLUCION INICIAL CON GREEDY
@@ -201,16 +202,6 @@ int main(int argc, char const *argv[]) {
             }
         }
     }
-    // for (int k = 0; k < x_edt[0][0].size();k++){
-    //     for (int i = 0; i < x_edt.size(); i++){
-    //         for (int j = 0;j <  x_edt[i].size(); j++){
-    //             cout << x_edt[i][j][k] << " ";
-    //         }
-    //         cout << endl;
-    //     }
-    //     cout << endl;
-    // }
-    // cout << global_best_score << endl;
 
     // TABUU SEARCH
     for (int n = 0; n < iter; n++){
@@ -242,6 +233,12 @@ int main(int argc, char const *argv[]) {
         }
         tabu_list.push_back(temp);
         x_edt = next_move;
+        auto now =  std::chrono::high_resolution_clock::now();
+        auto timeout = std::chrono::duration_cast<std::chrono::seconds>(now - begin);
+        if (timeout.count() >= 3){
+            cout << "timeout" << endl;
+            break;
+        }
     }
     auto end = std::chrono::high_resolution_clock::now();
     auto elapsed = std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin);
