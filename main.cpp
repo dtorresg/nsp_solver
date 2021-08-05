@@ -177,7 +177,7 @@ int main(int argc, char const *argv[]) {
     int current_score;
     int tabu_size = (x_edt.size() * x_edt[0].size() * x_edt[0][0].size())/2 + (x_edt.size() * x_edt[0].size() * x_edt[0][0].size())/4;
     vector<vector<int>> tabu_list;
-    int iter = atoi(argv[2]);
+    int iter = stoi(argv[2]);
     vector<vector<vector<int>>> current_move;
     vector<vector<vector<int>>> next_move;
 
