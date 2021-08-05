@@ -193,6 +193,8 @@ int main(int argc, char const *argv[]) {
                     if (current_score < local_best_score){
                         next_move = current_move;
                         local_best_score = current_score;
+                    }else{
+                        next_move = x_edt;
                     }
                     if (current_score < global_best_score){
                         global_solution = current_move;
