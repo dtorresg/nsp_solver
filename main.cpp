@@ -260,5 +260,6 @@ int main(int argc, char const *argv[]) {
     }
     cout << "Suma de penalizaciones: " << global_best_score << endl;
     printf("Tiempo total de ejecución: %.3f [s]\n", elapsed.count() * 1e-9);
+    cout << valid(true,current_move, R_t, m_et, l_t, a_e,b_e, o_e, f_e, c_e, g_e, N_e) << endl;
     return 0;
 }
