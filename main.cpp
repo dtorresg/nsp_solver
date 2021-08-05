@@ -80,22 +80,23 @@ int main(int argc, char const *argv[]) {
     }
 
     //ELEMENTOS DEL MODELO
-    vector<vector<vector<int>>> x_edt(SECTION_STAFF.size(), vector<vector<int>>(days, vector<int>(max))); // 1 Si el empleado e es asignado el dia d al turno t
+    vector<vector<vector<int>>> x_edt(SECTION_STAFF.size(), vector<vector<int>>(days, vector<int>(max))); // 1 si el empleado e es asignado el dia d al turno t
     vector<vector<int>> R_t(SECTION_SHIFTS.size(),vector<int>(1)); // Conjunto de los tipos de turno que no pueden ser asignados inmediatamente luego del turno de tipo t
     vector<vector<int>> N_e(SECTION_STAFF.size(),vector<int>(days)); // Dias en que el empleado e no puede ser asignado
-    vector<int> l_t(SECTION_SHIFTS.size()); //largo del turno t en minutos
-    vector<vector<int>> m_et(SECTION_STAFF.size(),vector<int>(SECTION_SHIFTS.size())); // numero maximo de turnos del tipo t que pueden ser asignados al empleado i
-    vector<int> b_e(SECTION_STAFF.size());
-    vector<int> c_e(SECTION_STAFF.size());
-    vector<int> f_e(SECTION_STAFF.size());
-    vector<int> g_e(SECTION_STAFF.size());
-    vector<int> o_e(SECTION_STAFF.size());
-    vector<int> a_e(SECTION_STAFF.size());
-    vector<vector<vector<int>>> q_edt(SECTION_STAFF.size(), vector<vector<int>>(days, vector<int>(max))); // penalizacion por no asignar el empleado e en el dia d al turno t
-    vector<vector<vector<int>>> p_edt(SECTION_STAFF.size(), vector<vector<int>>(days, vector<int>(max))); // penalizacion por asignar el empleado e en el dia d al turno t
-    vector<vector<int>> s_dt(days,vector<int>(SECTION_SHIFTS.size()));
-    vector<vector<int>> u_dt(days,vector<int>(SECTION_SHIFTS.size()));
-    vector<vector<int>> v_dt(days,vector<int>(SECTION_SHIFTS.size()));
+    vector<int> l_t(SECTION_SHIFTS.size()); // Largo del turno t en minutos
+    vector<vector<int>> m_et(SECTION_STAFF.size(),vector<int>(SECTION_SHIFTS.size())); // Número Máximo de turnos del tipo t que pueden ser asignados al empleado i
+    vector<int> b_e(SECTION_STAFF.size()); // Tiempo minimo en munitos que deben ser asignados al empleado e
+    vector<int> c_e(SECTION_STAFF.size()); // Tiempo maximo en munitos que pueden ser asignados al empleado e
+    vector<int> f_e(SECTION_STAFF.size()); // Mínimo de turnos consecutivos que deben ser asignados al empleado e
+    vector<int> g_e(SECTION_STAFF.size()); // Máximo de turnos consecutivos a los cuales el empleado e puede ser asignado
+    vector<int> o_e(SECTION_STAFF.size()); // Número mínimo de dias libres consecutivos que deben ser asignados al empleado
+    vector<int> a_e(SECTION_STAFF.size()); // Número máximo de fines de semana los cuales el empleado e puede ser asignado
+    vector<vector<vector<int>>> q_edt(SECTION_STAFF.size(), vector<vector<int>>(days, vector<int>(max))); // Penalización por no asignar el empleado e en el dia d al turno t
+    vector<vector<vector<int>>> p_edt(SECTION_STAFF.size(), vector<vector<int>>(days, vector<int>(max))); // Penalización por asignar el empleado e en el dia d al turno t
+    vector<vector<int>> s_dt(days,vector<int>(SECTION_SHIFTS.size())); // Numero preferido de empleados para ser asignado el dia d en el turno t
+    vector<vector<int>> u_dt(days,vector<int>(SECTION_SHIFTS.size())); // Penalización si esque se esta debajo de la covertura preferida
+    vector<vector<int>> v_dt(days,vector<int>(SECTION_SHIFTS.size())); // Penalización si esque se esta sobre la covertura preferida
+
     //RELLENO ELEMENTOS
     int empindex;
     int shiftindex;
@@ -180,9 +181,13 @@ int main(int argc, char const *argv[]) {
     int local_best_score = eval_func(days, SECTION_SHIFTS, x_edt, q_edt,l_t,b_e, o_e, f_e, p_edt, s_dt, u_dt, v_dt);
     int current_score;
     int tabu_size = (x_edt.size() * x_edt[0].size() * x_edt[0][0].size())/2 + (x_edt.size() * x_edt[0].size() * x_edt[0][0].size())/4;
+    if (argc == 4){
+        tabu_size = stoi(argv[3]);
+    }
     int iter = stoi(argv[2]);
-
+    cout << iter << " " << tabu_size << endl;
     auto begin = std::chrono::high_resolution_clock::now();
+
     //CONSTRUCCION DE SOLUCION INICIAL CON GREEDY
     for (int i = 0; i < x_edt.size(); i++){
         for (int j = 0;j <  x_edt[i].size(); j++){
@@ -236,7 +241,7 @@ int main(int argc, char const *argv[]) {
         auto now =  std::chrono::high_resolution_clock::now();
         auto timeout = std::chrono::duration_cast<std::chrono::seconds>(now - begin);
         if (timeout.count() >= 7200){
-            cout << "Timeout: Limite de 2 Horas Superado" << endl;
+            cout << "Timeout: Límite de 2 horas superado" << endl;
             break;
         }
     }
@@ -258,7 +263,7 @@ int main(int argc, char const *argv[]) {
     cout << "Suma de penalizaciones: " << global_best_score << endl;
     printf("Tiempo total de ejecución: %.3f [s]\n", elapsed.count() * 1e-9);
 
-    cout << "\n-------------------------------------\n Informacion Adicional \n-------------------------------------\n" << endl;
+    cout << "\n-------------------------------------\n Información Adicional \n-------------------------------------\n" << endl;
     int test = 0;
     for (int i = 0; i < global_solution.size(); i++){
         for (int j = 0;j < global_solution[i].size(); j++){
@@ -267,7 +272,7 @@ int main(int argc, char const *argv[]) {
             }
         }
         if (b_e[i] > test){
-            cout << "No cumple con el minimo de minutos de trabajo para el empleado " << SECTION_STAFF[i].id << endl;
+            cout << "No cumple con el mínimo de minutos de trabajo para el empleado " << SECTION_STAFF[i].id << endl;
         }
     }
     test = 0;
@@ -277,7 +282,7 @@ int main(int argc, char const *argv[]) {
                 test++;
             }else{
                 if (test < o_e[i] && test != 0){
-                    cout << "No cumple con el minimo de dias libres consecutivos para el empleado " << SECTION_STAFF[i].id << endl;
+                    cout << "No cumple con el mínimo de dias libres consecutivos para el empleado " << SECTION_STAFF[i].id << endl;
                 }
                 test = 0;
             }
@@ -290,7 +295,7 @@ int main(int argc, char const *argv[]) {
                 test++;
             }else{
                 if (test < f_e[i] && test != 0){
-                    cout << "No cumple con el minimo de turnos consecutivos para el empleado " << SECTION_STAFF[i].id << endl;
+                    cout << "No cumple con el mínimo de turnos consecutivos para el empleado " << SECTION_STAFF[i].id << endl;
                 }
                 test = 0;
             }

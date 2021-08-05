@@ -14,7 +14,7 @@
 #include "SecCover.h"
 
 using namespace std;
-
+// Permite encontrar el índice del empleado según su id
 int empIndex(string x){
     if (x.length() < 2){
         return (int)x[0] - 65;
@@ -23,6 +23,7 @@ int empIndex(string x){
     }
 }
 
+// Permite encontrar el índice del turno según su id
 int shiftIndex(string x, vector<SecShift> SECTION_SHIFTS){
     for (int i = 0;i<SECTION_SHIFTS.size();i++){
         if (SECTION_SHIFTS[i].name == x){
@@ -32,14 +33,15 @@ int shiftIndex(string x, vector<SecShift> SECTION_SHIFTS){
     return -1;
 }
 
+
 SecShift createSecShift(string myText){
     vector<string> result;
     vector<string> result2;
 
-    stringstream s_stream(myText); //create string stream from the string
+    stringstream s_stream(myText);
     while(s_stream.good()) {
         string substr;
-        getline(s_stream, substr, ','); //get first string delimited by comma
+        getline(s_stream, substr, ',');
         if (substr != ""){
             result.push_back(substr);
         }
@@ -49,10 +51,10 @@ SecShift createSecShift(string myText){
     int tiempo = stoi(result[1]);
 
     if (result.size() >= 3) {
-        stringstream s_stream(result[2]); //create string stream from the string
+        stringstream s_stream(result[2]);
         while(s_stream.good()) {
             string substr;
-            getline(s_stream, substr, '|'); //get first string delimited by comma
+            getline(s_stream, substr, '|');
             if (substr != ""){
                 result2.push_back(substr);
             }
@@ -64,10 +66,10 @@ SecShift createSecShift(string myText){
 
 int equalSeparator(string text){
     vector<string> result;
-    stringstream s_stream(text); //create string stream from the string
+    stringstream s_stream(text);
     while(s_stream.good()) {
         string substr;
-        getline(s_stream, substr, '='); //get first string delimited by comma
+        getline(s_stream, substr, '=');
         if (substr != ""){
             result.push_back(substr);
         }
@@ -79,19 +81,19 @@ SecStaff createSecStaff(string myText){
     vector<string> result;
     vector<int> result2;
 
-    stringstream s_stream(myText); //create string stream from the string
+    stringstream s_stream(myText);
     while(s_stream.good()) {
         string substr;
-        getline(s_stream, substr, ','); //get first string delimited by comma
+        getline(s_stream, substr, ',');
         if (substr != ""){
             result.push_back(substr);
         }
     }
     string id = result[0];
-    stringstream s_stream2(result[1]); //create string stream from the string
+    stringstream s_stream2(result[1]);
     while(s_stream2.good()) {
         string substr;
-        getline(s_stream2, substr, '|'); //get first string delimited by comma
+        getline(s_stream2, substr, '|');
         if (substr != ""){
             result2.push_back(equalSeparator(substr));
         }
@@ -110,10 +112,10 @@ SecDayOff createSecDayOff(string myText){
     vector<string> result;
     vector<int> result2;
 
-    stringstream s_stream(myText); //create string stream from the string
+    stringstream s_stream(myText);
     while(s_stream.good()) {
         string substr;
-        getline(s_stream, substr, ','); //get first string delimited by comma
+        getline(s_stream, substr, ',');
         if (substr != ""){
             result.push_back(substr);
         }
@@ -132,10 +134,10 @@ SecDayOff createSecDayOff(string myText){
 SecOnReq createSecOnReq(string myText){
     vector<string> result;
 
-    stringstream s_stream(myText); //create string stream from the string
+    stringstream s_stream(myText);
     while(s_stream.good()) {
         string substr;
-        getline(s_stream, substr, ','); //get first string delimited by comma
+        getline(s_stream, substr, ',');
         if (substr != ""){
             result.push_back(substr);
         }
@@ -146,10 +148,10 @@ SecOnReq createSecOnReq(string myText){
 SecOffReq createSecOffReq(string myText){
     vector<string> result;
 
-    stringstream s_stream(myText); //create string stream from the string
+    stringstream s_stream(myText);
     while(s_stream.good()) {
         string substr;
-        getline(s_stream, substr, ','); //get first string delimited by comma
+        getline(s_stream, substr, ',');
         if (substr != ""){
             result.push_back(substr);
         }
@@ -160,10 +162,10 @@ SecOffReq createSecOffReq(string myText){
 SecCover createSecCover(string myText){
     vector<string> result;
 
-    stringstream s_stream(myText); //create string stream from the string
+    stringstream s_stream(myText);
     while(s_stream.good()) {
         string substr;
-        getline(s_stream, substr, ','); //get first string delimited by comma
+        getline(s_stream, substr, ',');
         if (substr != ""){
             result.push_back(substr);
         }
@@ -195,7 +197,7 @@ int captureNumber(string myText,int currentFlag){
     }
     return currentFlag;
 }
-
+// Funcion de evaluación del algoritmo.
 int eval_func(int days, vector<SecShift> SECTION_SHIFTS, vector<vector<vector<int>>> x_edt, vector<vector<vector<int>>> q_edt, vector<int> l_t, vector<int> b_e, vector<int> o_e,vector<int> f_e, vector<vector<vector<int>>> p_edt,vector<vector<int>> s_dt,vector<vector<int>> u_dt, vector<vector<int>> v_dt){
     int suma1 = 0;
     int suma2 = 0;
@@ -287,7 +289,7 @@ vector<vector<vector<int>>> movimiento(int empleado, int dia, int turno, vector<
     x_edt[empleado][dia][turno] = 1;
     return x_edt;
 }
-
+// Validación de restricciones duras
 bool valid(vector<vector<vector<int>>> x_edt, vector<vector<int>> R_t, vector<vector<int>> m_et, vector<int> l_t, vector<int> a_e, vector<int> c_e, vector<int> g_e, vector<vector<int>> N_e){
     int suma = 0;
 
@@ -379,7 +381,7 @@ bool valid(vector<vector<vector<int>>> x_edt, vector<vector<int>> R_t, vector<ve
     }
     return true;
 }
-
+// Comprueba si el movimiento se encuentra en la lista tabu.
 bool inTabu(int i,int j, int k,vector<vector<int>> tabu_list){
     for (int a = 0; a < tabu_list.size();a++){
         if (tabu_list[a][0] == i && tabu_list[a][1] == j && tabu_list[a][2] == k){
