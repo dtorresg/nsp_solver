@@ -257,6 +257,8 @@ int main(int argc, char const *argv[]) {
 
     cout << "Suma de penalizaciones: " << global_best_score << endl;
     printf("Tiempo total de ejecución: %.3f [s]\n", elapsed.count() * 1e-9);
+
+    cout << "\n-------------------------------------\n Informacion Adicional \n-------------------------------------\n" << endl;
     int test = 0;
     for (int i = 0; i < global_solution.size(); i++){
         for (int j = 0;j < global_solution[i].size(); j++){
@@ -265,7 +267,7 @@ int main(int argc, char const *argv[]) {
             }
         }
         if (b_e[i] > test){
-            cout << "Not Valid" << endl;
+            cout << "No cumple con el minimo de minutos de trabajo para el empleado " << SECTION_STAFF[i].id << endl;
         }
     }
     test = 0;
@@ -275,7 +277,7 @@ int main(int argc, char const *argv[]) {
                 test++;
             }else{
                 if (test < o_e[i] && test != 0){
-                    cout << "Not Valid" << endl;
+                    cout << "No cumple con el minimo de dias libres consecutivos para el empleado " << SECTION_STAFF[i].id << endl;
                 }
                 test = 0;
             }
@@ -288,7 +290,7 @@ int main(int argc, char const *argv[]) {
                 test++;
             }else{
                 if (test < f_e[i] && test != 0){
-                    cout << "Not Valid" << endl;
+                    cout << "No cumple con el minimo de turnos consecutivos para el empleado " << SECTION_STAFF[i].id << endl;
                 }
                 test = 0;
             }
