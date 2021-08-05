@@ -257,5 +257,42 @@ int main(int argc, char const *argv[]) {
 
     cout << "Suma de penalizaciones: " << global_best_score << endl;
     printf("Tiempo total de ejecución: %.3f [s]\n", elapsed.count() * 1e-9);
+    int test = 0;
+    for (int i = 0; i < x_edt.size(); i++){
+        for (int j = 0;j < x_edt[i].size(); j++){
+            for (int k = 0;k < x_edt[i][j].size(); k++){
+                test = test + x_edt[i][j][k]*l_t[k];
+            }
+        }
+        if (b_e[i] > test){
+            cout << "Not Valid" << endl;
+        }
+    }
+    test = 0;
+    for (int i = 0; i < x_edt.size(); i++){
+        for (int j = 0;j < x_edt[i].size(); j++){
+            if (accumulate(x_edt[i][j].begin(), x_edt[i][j].end(), 0) == 0){
+                test++;
+            }else{
+                if (test < o_e[i] && test != 0){
+                    cout << "Not Valid" << endl;
+                }
+                test = 0;
+            }
+        }
+    }
+    test = 0;
+    for (int i = 0; i < x_edt.size(); i++){
+        for (int j = 0;j < x_edt[i].size(); j++){
+            if (accumulate(x_edt[i][j].begin(), x_edt[i][j].end(), 0) == 1){
+                test++;
+            }else{
+                if (test < f_e[i] && test != 0){
+                    cout << "Not Valid" << endl;
+                }
+                test = 0;
+            }
+        }
+    }
     return 0;
 }
