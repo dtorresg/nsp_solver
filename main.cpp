@@ -209,7 +209,9 @@ int main(int argc, char const *argv[]) {
         }
         x_edt = next_move;
     }
-    global_best_score = eval_func(days, SECTION_SHIFTS, x_edt, q_edt,l_t,b_e, o_e, f_e, p_edt, s_dt, u_dt, v_dt);
+
+    global_best_score = eval_func(days, SECTION_SHIFTS, x_edt, q_edt,l_t, p_edt, s_dt, u_dt, v_dt);
+
     // TABUU SEARCH
     for (int n = 0; n < iter; n++){
         local_best_score = 999999999;
@@ -218,7 +220,7 @@ int main(int argc, char const *argv[]) {
                 for (int k = 0;k < x_edt[i][j].size(); k++){
                     current_move = movimiento(i, j, k, x_edt);
                     if (valid(false, current_move, R_t, m_et, l_t, a_e, b_e, o_e, f_e , c_e, g_e, N_e) && !inTabu(i,j,k,tabu_list)){
-                        current_score = eval_func(days, SECTION_SHIFTS, current_move, q_edt,l_t,b_e, o_e, f_e, p_edt, s_dt, u_dt, v_dt);
+                        current_score = eval_func(days, SECTION_SHIFTS, current_move, q_edt,l_t, p_edt, s_dt, u_dt, v_dt);
                         if (current_score < local_best_score){
                             temp.clear();
                             temp.push_back(i);
@@ -243,7 +245,7 @@ int main(int argc, char const *argv[]) {
         auto now =  std::chrono::high_resolution_clock::now();
         auto timeout = std::chrono::duration_cast<std::chrono::seconds>(now - begin);
         if (timeout.count() >= 7200){
-            std::cout << "Timeout: Límite de 2 horas superado" << endl;
+            cout << "Timeout: Límite de 2 horas superado" << endl;
             break;
         }
     }
@@ -251,18 +253,18 @@ int main(int argc, char const *argv[]) {
     auto elapsed = std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin);
 
     for (int i = 0; i < x_edt.size();i++){
-        std::cout << SECTION_STAFF[i].id << ": ";
+        cout << SECTION_STAFF[i].id << ": ";
         for (int j = 0; j < x_edt[i].size();j++){
             for (int k = 0; k < x_edt[i][j].size();k++){
                 if (x_edt[i][j][k] == 1){
-                    std::cout << "(" << j << "," << SECTION_SHIFTS[k].name << ") ";
+                    cout << "(" << j << "," << SECTION_SHIFTS[k].name << ") ";
                 }
             }
         }
-        std::cout << endl;
+        cout << endl;
     }
 
-    std::cout << "Suma de penalizaciones: " << global_best_score << endl;
-    std::printf("Tiempo total de ejecución: %.3f [s]\n", elapsed.count() * 1e-9);
+    cout << "Suma de penalizaciones: " << global_best_score << endl;
+    printf("Tiempo total de ejecución: %.3f [s]\n", elapsed.count() * 1e-9);
     return 0;
 }
