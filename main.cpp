@@ -209,8 +209,7 @@ int main(int argc, char const *argv[]) {
         }
         x_edt = next_move;
     }
-    cout << "aca" << endl;
-    cout << "aca2" << endl;
+    cout << valid(false, current_move, R_t, m_et, l_t, a_e, b_e, o_e, f_e , c_e, g_e, N_e) << endl;
     // TABUU SEARCH
     for (int n = 0; n < iter; n++){
         local_best_score = 999999999;
