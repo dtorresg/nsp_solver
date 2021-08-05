@@ -4,6 +4,7 @@
 #include<sstream>
 #include <string>
 #include <numeric>
+#include <chrono>
 using namespace std;
 
 class SecShift {
@@ -18,7 +19,7 @@ class SecShift {
             notfollowthis = notfoll;
         }
 };
-// ID, MaxShifts, MaxTotalMinutes, MinTotalMinutes, MaxConsecutiveShifts, MinConsecutiveShifts, MinConsecutiveDaysOff, MaxWeekends
+
 class SecStaff {
     public:
         string id;
@@ -334,7 +335,7 @@ int eval_func(vector<vector<vector<int>>> x_edt, vector<vector<vector<int>>> q_e
             }
         }
         if (b_e[i] > temp){
-            suma3 = suma3 + (b_e[i] - temp)*10;
+            suma3 = suma3 + (b_e[i] - temp)*50;
         }
     }
     temp = 0;
@@ -343,8 +344,8 @@ int eval_func(vector<vector<vector<int>>> x_edt, vector<vector<vector<int>>> q_e
             if (accumulate(x_edt[i][j].begin(), x_edt[i][j].end(), 0) == 0){
                 temp++;
             }else{
-                if (temp < o_e[i]){
-                    suma4 = suma4 + (o_e[i] - temp)*10;
+                if (temp < o_e[i] && temp != 0){
+                    suma4 = suma4 + (o_e[i] - temp)*50;
                 }
                 temp = 0;
             }
@@ -357,7 +358,7 @@ int eval_func(vector<vector<vector<int>>> x_edt, vector<vector<vector<int>>> q_e
                 temp++;
             }else{
                 if (temp < f_e[i] && temp != 0){
-                    suma5 = suma5 + (f_e[i] - temp)*10;
+                    suma5 = suma5 + (f_e[i] - temp)*50;
                 }
                 temp = 0;
             }
@@ -446,16 +447,10 @@ bool valid(vector<vector<vector<int>>> x_edt, vector<vector<int>> R_t, vector<ve
             if (accumulate(x_edt[i][j].begin(), x_edt[i][j].end(), 0) == 1){
                 suma = suma + 1;
                 if (suma > g_e[i]){
-                    if (j == 12 || j ==13){
-                                //cout << "aca 5" << endl;
-                            }
                     return false;
                 }
             } else {
                 if (suma > g_e[i]){
-                    if (j == 12 || j ==13){
-                                //cout << "aca 5.1" << endl;
-                            }
                     return false;
                 }
                 suma = 0;
@@ -642,11 +637,14 @@ int main() {
     vector<vector<vector<int>>> global_solution;
     int local_best_score = eval_func(x_edt, q_edt,l_t,b_e, o_e, f_e, p_edt, s_dt, u_dt, v_dt);
     int current_score;
-    
-    cout << global_best_score << endl;
-    //CONSTRUCCION DE SOLUCION INICIAL CON GREEDY
+    int tabu_size = (x_edt.size() * x_edt[0].size() * x_edt[0][0].size())/2 + (x_edt.size() * x_edt[0].size() * x_edt[0][0].size())/4;
+    vector<vector<int>> tabu_list;
+    int iter = 10000;
     vector<vector<vector<int>>> current_move;
     vector<vector<vector<int>>> next_move;
+
+    auto begin = std::chrono::high_resolution_clock::now();
+    //CONSTRUCCION DE SOLUCION INICIAL CON GREEDY
     for (int i = 0; i < x_edt.size(); i++){
         for (int j = 0;j <  x_edt[i].size(); j++){
             for (int k = 0;k < x_edt[i][j].size(); k++){
@@ -665,26 +663,20 @@ int main() {
             }
         }
     }
-    for (int k = 0; k < x_edt[0][0].size();k++){
-        for (int i = 0; i < x_edt.size(); i++){
-            for (int j = 0;j <  x_edt[i].size(); j++){
-                cout << x_edt[i][j][k] << " ";
-            }
-            cout << endl;
-        }
-        cout << endl;
-    }
-    cout << global_best_score << endl;
-
-
-    int tabu_size = (x_edt.size() * x_edt[0].size() * x_edt[0][0].size())/2;
-    vector<vector<int>> tabu_list;
-    int iter = 1000;
-
+    // for (int k = 0; k < x_edt[0][0].size();k++){
+    //     for (int i = 0; i < x_edt.size(); i++){
+    //         for (int j = 0;j <  x_edt[i].size(); j++){
+    //             cout << x_edt[i][j][k] << " ";
+    //         }
+    //         cout << endl;
+    //     }
+    //     cout << endl;
+    // }
+    // cout << global_best_score << endl;
 
     // TABUU SEARCH
     for (int n = 0; n < iter; n++){
-        local_best_score = 99999999;
+        local_best_score = 999999999;
         for (int i = 0; i < x_edt.size(); i++){
             for (int j = 0;j <  x_edt[i].size(); j++){
                 for (int k = 0;k < x_edt[i][j].size(); k++){
@@ -713,17 +705,22 @@ int main() {
         tabu_list.push_back(temp);
         x_edt = next_move;
     }
+    auto end = std::chrono::high_resolution_clock::now();
+    auto elapsed = std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin);
 
-    for (int k = 0; k < global_solution[0][0].size();k++){
-        for (int i = 0; i < global_solution.size(); i++){
-            for (int j = 0;j <  global_solution[i].size(); j++){
-                cout << global_solution[i][j][k] << " ";
+    for (int i = 0; i < x_edt.size();i++){
+        cout << SECTION_STAFF[i].id << ": ";
+        for (int j = 0; j < x_edt[i].size();j++){
+            for (int k = 0; k < x_edt[i][j].size();k++){
+                if (x_edt[i][j][k] == 1){
+                    cout << "(" << j << "," << SECTION_SHIFTS[k].name << ") ";
+                }
             }
-            cout << endl;
         }
         cout << endl;
     }
-    cout << global_best_score << endl;
 
+    cout << "Suma de penalizaciones: " << global_best_score << endl;
+    printf("Tiempo total de ejecución: %.3f [s]\n", elapsed.count() * 1e-9);
     return 0;
 }
