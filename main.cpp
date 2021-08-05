@@ -177,8 +177,8 @@ int main(int argc, char const *argv[]) {
     vector<vector<vector<int>>> current_move;
     vector<vector<vector<int>>> next_move;
     vector<vector<int>> tabu_list;
-    int global_best_score = eval_func(days, SECTION_SHIFTS, x_edt, q_edt,l_t,b_e, o_e, f_e, p_edt, s_dt, u_dt, v_dt);
-    int local_best_score = eval_func(days, SECTION_SHIFTS, x_edt, q_edt,l_t,b_e, o_e, f_e, p_edt, s_dt, u_dt, v_dt);
+    int global_best_score = greedy_val(x_edt,b_e,o_e,f_e,l_t);
+    int local_best_score = greedy_val(x_edt,b_e,o_e,f_e,l_t);
     int current_score;
     int tabu_size = (x_edt.size() * x_edt[0].size() * x_edt[0][0].size())/2;
     if (argc == 4){
@@ -188,23 +188,26 @@ int main(int argc, char const *argv[]) {
     auto begin = std::chrono::high_resolution_clock::now();
 
     //CONSTRUCCION DE SOLUCION INICIAL CON GREEDY
-    for (int i = 0; i < x_edt.size(); i++){
-        for (int j = 0;j <  x_edt[i].size(); j++){
-            for (int k = 0;k < x_edt[i][j].size(); k++){
-                current_move = movimiento(i, j, k, x_edt);
-                if (valid(current_move, R_t, m_et, l_t, a_e, c_e, g_e, N_e)){
-                    current_score = eval_func(days, SECTION_SHIFTS, current_move, q_edt,l_t,b_e, o_e, f_e, p_edt, s_dt, u_dt, v_dt);
-                    if (current_score < local_best_score){
-                        x_edt = current_move;
-                        local_best_score = current_score;
-                    }
-                    if (current_score < global_best_score){
-                        global_solution = current_move;
-                        global_best_score = current_score;
+    while (greedy_val(x_edt,b_e,o_e,f_e,l_t) != 0){
+        for (int i = 0; i < x_edt.size(); i++){
+            for (int j = 0;j <  x_edt[i].size(); j++){
+                for (int k = 0;k < x_edt[i][j].size(); k++){
+                    current_move = movimiento(i, j, k, x_edt);
+                    if (valid(true, current_move, R_t, m_et, l_t, a_e, c_e, g_e, N_e)){
+                        current_score = greedy_val(current_move,b_e,o_e,f_e,l_t);
+                        if (current_score < local_best_score){
+                            next_move = current_move;
+                            local_best_score = current_score;
+                            if (local_best_score < global_best_score){
+                                global_solution = current_move;
+                                global_best_score = current_score;
+                            }
+                        }
                     }
                 }
             }
         }
+        x_edt = next_move;
     }
 
     // TABUU SEARCH
@@ -214,7 +217,7 @@ int main(int argc, char const *argv[]) {
             for (int j = 0;j <  x_edt[i].size(); j++){
                 for (int k = 0;k < x_edt[i][j].size(); k++){
                     current_move = movimiento(i, j, k, x_edt);
-                    if (valid(current_move, R_t, m_et, l_t, a_e, c_e, g_e, N_e) && !inTabu(i,j,k,tabu_list)){
+                    if (valid(false, current_move, R_t, m_et, l_t, a_e, c_e, g_e, N_e) && !inTabu(i,j,k,tabu_list)){
                         current_score = eval_func(days, SECTION_SHIFTS, current_move, q_edt,l_t,b_e, o_e, f_e, p_edt, s_dt, u_dt, v_dt);
                         if (current_score < local_best_score){
                             temp.clear();

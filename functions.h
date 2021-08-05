@@ -17,6 +17,8 @@ SecShift createSecShift(string myText);
 
 int equalSeparator(string text);
 
+int greedy_val(vector<vector<vector<int>>> x_edt, vector<int> b_e, vector<int> o_e,vector<int> f_e,vector<int> l_t);
+
 SecStaff createSecStaff(string myText);
 
 SecDayOff createSecDayOff(string myText);
@@ -33,6 +35,6 @@ int eval_func(int days, vector<SecShift> SECTION_SHIFTS, vector<vector<vector<in
 
 vector<vector<vector<int>>> movimiento(int empleado, int dia, int turno, vector<vector<vector<int>>> x_edt);
 
-bool valid(vector<vector<vector<int>>> x_edt, vector<vector<int>> R_t, vector<vector<int>> m_et, vector<int> l_t, vector<int> a_e, vector<int> c_e, vector<int> g_e, vector<vector<int>> N_e);
+bool valid(bool greedy,vector<vector<vector<int>>> x_edt, vector<vector<int>> R_t, vector<vector<int>> m_et, vector<int> l_t, vector<int> a_e, vector<int> c_e, vector<int> g_e, vector<vector<int>> N_e);
 
 bool inTabu(int i,int j, int k,vector<vector<int>> tabu_list);
