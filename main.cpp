@@ -247,11 +247,11 @@ int main(int argc, char const *argv[]) {
     auto end = std::chrono::high_resolution_clock::now();
     auto elapsed = std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin);
 
-    for (int i = 0; i < x_edt.size();i++){
+    for (int i = 0; i < global_solution.size();i++){
         cout << SECTION_STAFF[i].id << ": ";
-        for (int j = 0; j < x_edt[i].size();j++){
-            for (int k = 0; k < x_edt[i][j].size();k++){
-                if (x_edt[i][j][k] == 1){
+        for (int j = 0; j < global_solution[i].size();j++){
+            for (int k = 0; k < global_solution[i][j].size();k++){
+                if (global_solution[i][j][k] == 1){
                     cout << "(" << j << "," << SECTION_SHIFTS[k].name << ") ";
                 }
             }
