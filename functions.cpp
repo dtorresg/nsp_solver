@@ -339,8 +339,21 @@ bool valid(bool greedy, vector<vector<vector<int>>> x_edt, vector<vector<int>> R
         }
         suma = 0;
     }
+    int temp = 0;
+    for (int i = 0; i < x_edt.size(); i++){
+        for (int j = 0;j < x_edt[i].size(); j++){
+            if (accumulate(x_edt[i][j].begin(), x_edt[i][j].end(), 0) == 0){
+                temp++;
+            }else{
+                if (temp < o_e[i] && temp != 0){
+                    return false;
+                }
+                temp = 0;
+            }
+        }
+    }
+    temp = 0;
     if (!greedy){
-        int temp = 0;
         for (int i = 0; i < x_edt.size(); i++){
             for (int j = 0;j < x_edt[i].size(); j++){
                 for (int k = 0;k < x_edt[i][j].size(); k++){
@@ -351,19 +364,6 @@ bool valid(bool greedy, vector<vector<vector<int>>> x_edt, vector<vector<int>> R
                 return false;
             }
             temp = 0;
-        }
-        temp = 0;
-        for (int i = 0; i < x_edt.size(); i++){
-            for (int j = 0;j < x_edt[i].size(); j++){
-                if (accumulate(x_edt[i][j].begin(), x_edt[i][j].end(), 0) == 0){
-                    temp++;
-                }else{
-                    if (temp < o_e[i] && temp != 0){
-                        return false;
-                    }
-                    temp = 0;
-                }
-            }
         }
         temp = 0;
         for (int i = 0; i < x_edt.size(); i++){
