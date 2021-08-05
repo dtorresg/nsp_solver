@@ -198,7 +198,7 @@ int captureNumber(string myText,int currentFlag){
     return currentFlag;
 }
 // Funcion de evaluación del algoritmo.
-int eval_func(int days, vector<SecShift> SECTION_SHIFTS, vector<vector<vector<int>>> x_edt, vector<vector<vector<int>>> q_edt, vector<int> l_t, vector<int> b_e, vector<int> o_e,vector<int> f_e, vector<vector<vector<int>>> p_edt,vector<vector<int>> s_dt,vector<vector<int>> u_dt, vector<vector<int>> v_dt){
+int eval_func(int days, vector<SecShift> SECTION_SHIFTS, vector<vector<vector<int>>> x_edt, vector<vector<vector<int>>> q_edt, vector<int> l_t, vector<vector<vector<int>>> p_edt,vector<vector<int>> s_dt,vector<vector<int>> u_dt, vector<vector<int>> v_dt){
     int suma1 = 0;
     int suma2 = 0;
     int suma3 = 0;
@@ -233,45 +233,7 @@ int eval_func(int days, vector<SecShift> SECTION_SHIFTS, vector<vector<vector<in
             suma2 = suma2 + (y_dt[j][k]*u_dt[j][k]) + (z_dt[j][k]*v_dt[j][k]);
         }
     }
-    temp = 0;
-    for (int i = 0; i < x_edt.size(); i++){
-        for (int j = 0;j < x_edt[i].size(); j++){
-            for (int k = 0;k < x_edt[i][j].size(); k++){
-                temp = temp + x_edt[i][j][k]*l_t[k];
-            }
-        }
-        if (b_e[i] > temp){
-            suma3 = suma3 + (b_e[i] - temp)*500;
-        }
-        temp = 0;
-    }
-    temp = 0;
-    for (int i = 0; i < x_edt.size(); i++){
-        for (int j = 0;j < x_edt[i].size(); j++){
-            if (accumulate(x_edt[i][j].begin(), x_edt[i][j].end(), 0) == 0){
-                temp++;
-            }else{
-                if (temp < o_e[i] && temp != 0){
-                    suma4 = suma4 + (o_e[i] - temp)*1000;
-                }
-                temp = 0;
-            }
-        }
-    }
-    temp = 0;
-    for (int i = 0; i < x_edt.size(); i++){
-        for (int j = 0;j < x_edt[i].size(); j++){
-            if (accumulate(x_edt[i][j].begin(), x_edt[i][j].end(), 0) == 1){
-                temp++;
-            }else{
-                if (temp < f_e[i] && temp != 0){
-                    suma5 = suma5 + (f_e[i] - temp)*500;
-                }
-                temp = 0;
-            }
-        }
-    }
-    return suma1 + suma2 + suma3 + suma4 + suma5;
+    return suma1 + suma2 + suma3;
 }
 
 vector<vector<vector<int>>> movimiento(int empleado, int dia, int turno, vector<vector<vector<int>>> x_edt){
@@ -291,7 +253,7 @@ vector<vector<vector<int>>> movimiento(int empleado, int dia, int turno, vector<
     return x_edt;
 }
 // Validación de restricciones duras
-bool valid(vector<vector<vector<int>>> x_edt, vector<vector<int>> R_t, vector<vector<int>> m_et, vector<int> l_t, vector<int> a_e, vector<int> c_e, vector<int> g_e, vector<vector<int>> N_e){
+bool valid(bool greedy, vector<vector<vector<int>>> x_edt, vector<vector<int>> R_t, vector<vector<int>> m_et, vector<int> l_t, vector<int> a_e,vector<int> b_e, vector<int> o_e,vector<int> f_e, vector<int> c_e, vector<int> g_e, vector<vector<int>> N_e){
     int suma = 0;
 
     //RESTRICCION DE ROTACION DE TURNOS (EJ: TURNO A NO PUEDE SER ASIGNADO LUEGO DE B AL DIA SIGUIENTE)
@@ -379,6 +341,46 @@ bool valid(vector<vector<vector<int>>> x_edt, vector<vector<int>> R_t, vector<ve
             return false;
         }
         suma = 0;
+    }
+    if (!greedy){
+        int temp = 0;
+        for (int i = 0; i < x_edt.size(); i++){
+            for (int j = 0;j < x_edt[i].size(); j++){
+                for (int k = 0;k < x_edt[i][j].size(); k++){
+                    temp = temp + x_edt[i][j][k]*l_t[k];
+                }
+            }
+            if (b_e[i] > temp){
+                return false;
+            }
+            temp = 0;
+        }
+        temp = 0;
+        for (int i = 0; i < x_edt.size(); i++){
+            for (int j = 0;j < x_edt[i].size(); j++){
+                if (accumulate(x_edt[i][j].begin(), x_edt[i][j].end(), 0) == 0){
+                    temp++;
+                }else{
+                    if (temp < o_e[i] && temp != 0){
+                        return false;
+                    }
+                    temp = 0;
+                }
+            }
+        }
+        temp = 0;
+        for (int i = 0; i < x_edt.size(); i++){
+            for (int j = 0;j < x_edt[i].size(); j++){
+                if (accumulate(x_edt[i][j].begin(), x_edt[i][j].end(), 0) == 1){
+                    temp++;
+                }else{
+                    if (temp < f_e[i] && temp != 0){
+                        return false;
+                    }
+                    temp = 0;
+                }
+            }
+        }
     }
     return true;
 }
