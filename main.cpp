@@ -259,12 +259,49 @@ int main(int argc, char const *argv[]) {
         }
         cout << endl;
     }
+    int test = 0;
+    for (int i = 0; i < global_solution.size(); i++){
+        for (int j = 0;j < global_solution[i].size(); j++){
+            for (int k = 0;k < global_solution[i][j].size(); k++){
+                test = test + global_solution[i][j][k]*l_t[k];
+            }
+        }
+        if (b_e[i] > test){
+            global_best_score = global_best_score - (b_e[i] - test)*1000;
+        }
+    }
+    test = 0;
+    for (int i = 0; i < global_solution.size(); i++){
+        for (int j = 0;j < global_solution[i].size(); j++){
+            if (accumulate(global_solution[i][j].begin(), global_solution[i][j].end(), 0) == 0){
+                test++;
+            }else{
+                if (test < o_e[i] && test != 0){
+                    global_best_score = global_best_score - (o_e[i] - test)*1000;
+                }
+                test = 0;
+            }
+        }
+    }
+    test = 0;
+    for (int i = 0; i < global_solution.size(); i++){
+        for (int j = 0;j < global_solution[i].size(); j++){
+            if (accumulate(global_solution[i][j].begin(), global_solution[i][j].end(), 0) == 1){
+                test++;
+            }else{
+                if (test < f_e[i] && test != 0){
+                    global_best_score = global_best_score - (f_e[i] - test)*1000;
+                }
+                test = 0;
+            }
+        }
+    }
 
     cout << "Suma de penalizaciones: " << global_best_score << endl;
     printf("Tiempo total de ejecución: %.3f [s]\n", elapsed.count() * 1e-9);
 
     cout << "\n-------------------------------------\n Información Adicional \n-------------------------------------\n" << endl;
-    int test = 0;
+    test = 0;
     for (int i = 0; i < global_solution.size(); i++){
         for (int j = 0;j < global_solution[i].size(); j++){
             for (int k = 0;k < global_solution[i][j].size(); k++){
