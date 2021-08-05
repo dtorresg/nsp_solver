@@ -198,7 +198,7 @@ int captureNumber(string myText,int currentFlag){
     return currentFlag;
 }
 // Funcion de evaluación del algoritmo.
-int eval_func(int days, vector<SecShift> SECTION_SHIFTS, vector<vector<vector<int>>> x_edt, vector<vector<vector<int>>> q_edt, vector<int> l_t, vector<int> b_e, vector<int> o_e,vector<int> f_e, vector<vector<vector<int>>> p_edt,vector<vector<int>> s_dt,vector<vector<int>> u_dt, vector<vector<int>> v_dt){
+int eval_func(int days, vector<SecShift> SECTION_SHIFTS, vector<vector<vector<int>>> x_edt, vector<vector<vector<int>>> q_edt, vector<int> l_t, vector<int> o_e,vector<int> f_e, vector<vector<vector<int>>> p_edt,vector<vector<int>> s_dt,vector<vector<int>> u_dt, vector<vector<int>> v_dt){
     int suma1 = 0;
     int suma2 = 0;
     int suma3 = 0;
@@ -232,18 +232,6 @@ int eval_func(int days, vector<SecShift> SECTION_SHIFTS, vector<vector<vector<in
         for(int k = 0; k<y_dt[j].size();k++){
             suma2 = suma2 + (y_dt[j][k]*u_dt[j][k]) + (z_dt[j][k]*v_dt[j][k]);
         }
-    }
-    temp = 0;
-    for (int i = 0; i < x_edt.size(); i++){
-        for (int j = 0;j < x_edt[i].size(); j++){
-            for (int k = 0;k < x_edt[i][j].size(); k++){
-                temp = temp + x_edt[i][j][k]*l_t[k];
-            }
-        }
-        if (b_e[i] > temp){
-            suma3 = suma3 + (b_e[i] - temp)*1000;
-        }
-        temp = 0;
     }
     temp = 0;
     for (int i = 0; i < x_edt.size(); i++){

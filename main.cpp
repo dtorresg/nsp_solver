@@ -85,7 +85,6 @@ int main(int argc, char const *argv[]) {
     vector<vector<int>> N_e(SECTION_STAFF.size(),vector<int>(days)); // Dias en que el empleado e no puede ser asignado
     vector<int> l_t(SECTION_SHIFTS.size()); // Largo del turno t en minutos
     vector<vector<int>> m_et(SECTION_STAFF.size(),vector<int>(SECTION_SHIFTS.size())); // Número Máximo de turnos del tipo t que pueden ser asignados al empleado i
-    vector<int> b_e(SECTION_STAFF.size()); // Tiempo minimo en munitos que deben ser asignados al empleado e
     vector<int> c_e(SECTION_STAFF.size()); // Tiempo maximo en munitos que pueden ser asignados al empleado e
     vector<int> f_e(SECTION_STAFF.size()); // Mínimo de turnos consecutivos que deben ser asignados al empleado e
     vector<int> g_e(SECTION_STAFF.size()); // Máximo de turnos consecutivos a los cuales el empleado e puede ser asignado
@@ -142,9 +141,6 @@ int main(int argc, char const *argv[]) {
         }
     }
     for (int i = 0; i < SECTION_STAFF.size(); i++){
-        b_e[i] = SECTION_STAFF[i].MinTM;
-    }
-    for (int i = 0; i < SECTION_STAFF.size(); i++){
         c_e[i] = SECTION_STAFF[i].MaxTM;
     }
     for (int i = 0; i < SECTION_STAFF.size(); i++){
@@ -177,8 +173,8 @@ int main(int argc, char const *argv[]) {
     vector<vector<vector<int>>> current_move;
     vector<vector<vector<int>>> next_move;
     vector<vector<int>> tabu_list;
-    int global_best_score = eval_func(days, SECTION_SHIFTS, x_edt, q_edt,l_t,b_e, o_e, f_e, p_edt, s_dt, u_dt, v_dt);
-    int local_best_score = eval_func(days, SECTION_SHIFTS, x_edt, q_edt,l_t,b_e, o_e, f_e, p_edt, s_dt, u_dt, v_dt);
+    int global_best_score = eval_func(days, SECTION_SHIFTS, x_edt, q_edt,l_t, o_e, f_e, p_edt, s_dt, u_dt, v_dt);
+    int local_best_score = eval_func(days, SECTION_SHIFTS, x_edt, q_edt,l_t, o_e, f_e, p_edt, s_dt, u_dt, v_dt);
     int current_score;
     int tabu_size = (x_edt.size() * x_edt[0].size() * x_edt[0][0].size())/2;
     if (argc == 4){
@@ -193,7 +189,7 @@ int main(int argc, char const *argv[]) {
             for (int k = 0;k < x_edt[i][j].size(); k++){
                 current_move = movimiento(i, j, k, x_edt);
                 if (valid(current_move, R_t, m_et, l_t, a_e, c_e, g_e, N_e)){
-                    current_score = eval_func(days, SECTION_SHIFTS, current_move, q_edt,l_t,b_e, o_e, f_e, p_edt, s_dt, u_dt, v_dt);
+                    current_score = eval_func(days, SECTION_SHIFTS, current_move, q_edt,l_t, o_e, f_e, p_edt, s_dt, u_dt, v_dt);
                     if (current_score < local_best_score){
                         x_edt = current_move;
                         local_best_score = current_score;
@@ -215,7 +211,7 @@ int main(int argc, char const *argv[]) {
                 for (int k = 0;k < x_edt[i][j].size(); k++){
                     current_move = movimiento(i, j, k, x_edt);
                     if (valid(current_move, R_t, m_et, l_t, a_e, c_e, g_e, N_e) && !inTabu(i,j,k,tabu_list)){
-                        current_score = eval_func(days, SECTION_SHIFTS, current_move, q_edt,l_t,b_e, o_e, f_e, p_edt, s_dt, u_dt, v_dt);
+                        current_score = eval_func(days, SECTION_SHIFTS, current_move, q_edt,l_t, o_e, f_e, p_edt, s_dt, u_dt, v_dt);
                         if (current_score < local_best_score){
                             temp.clear();
                             temp.push_back(i);
@@ -261,18 +257,6 @@ int main(int argc, char const *argv[]) {
     int test = 0;
     for (int i = 0; i < global_solution.size(); i++){
         for (int j = 0;j < global_solution[i].size(); j++){
-            for (int k = 0;k < global_solution[i][j].size(); k++){
-                test = test + global_solution[i][j][k]*l_t[k];
-            }
-        }
-        if (b_e[i] > test){
-            global_best_score = global_best_score - (b_e[i] - test)*500;
-        }
-        test = 0;
-    }
-    test = 0;
-    for (int i = 0; i < global_solution.size(); i++){
-        for (int j = 0;j < global_solution[i].size(); j++){
             if (accumulate(global_solution[i][j].begin(), global_solution[i][j].end(), 0) == 0){
                 test++;
             }else{
@@ -301,18 +285,6 @@ int main(int argc, char const *argv[]) {
     printf("Tiempo total de ejecución: %.3f [s]\n", elapsed.count() * 1e-9);
 
     cout << "\n-------------------------------------\n Información Adicional \n-------------------------------------\n" << endl;
-    test = 0;
-    for (int i = 0; i < global_solution.size(); i++){
-        for (int j = 0;j < global_solution[i].size(); j++){
-            for (int k = 0;k < global_solution[i][j].size(); k++){
-                test = test + global_solution[i][j][k]*l_t[k];
-            }
-        }
-        if (b_e[i] > test){
-            cout << "- No cumple con el mínimo de minutos de trabajo para el empleado " << SECTION_STAFF[i].id << endl;
-        }
-        test = 0;
-    }
     test = 0;
     for (int i = 0; i < global_solution.size(); i++){
         for (int j = 0;j < global_solution[i].size(); j++){
