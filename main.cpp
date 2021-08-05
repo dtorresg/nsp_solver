@@ -25,12 +25,12 @@ vector<SecOnReq> SECTION_SHIFT_ON_REQUESTS;
 vector<SecOffReq> SECTION_SHIFT_OFF_REQUESTS;
 vector<SecCover> SECTION_COVER;
 
-int main() {
+int main(int argc, char const *argv[]) {
     string myText;
     int captureFlag = 0;
     int oldFlag = 0;
     //Inicio Capturador de Instancia
-    ifstream MyReadFile("instance1.txt");
+    ifstream MyReadFile(argv[1]);
     while (getline (MyReadFile, myText)) {
         if(myText.find("#") != 0 and !(myText.empty())){
             oldFlag = captureFlag;
@@ -177,7 +177,7 @@ int main() {
     int current_score;
     int tabu_size = (x_edt.size() * x_edt[0].size() * x_edt[0][0].size())/2 + (x_edt.size() * x_edt[0].size() * x_edt[0][0].size())/4;
     vector<vector<int>> tabu_list;
-    int iter = 10000;
+    int iter = atoi(argv[2]);
     vector<vector<vector<int>>> current_move;
     vector<vector<vector<int>>> next_move;
 
