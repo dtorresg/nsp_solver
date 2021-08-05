@@ -180,7 +180,7 @@ int main(int argc, char const *argv[]) {
     int global_best_score = eval_func(days, SECTION_SHIFTS, x_edt, q_edt,l_t,b_e, o_e, f_e, p_edt, s_dt, u_dt, v_dt);
     int local_best_score = eval_func(days, SECTION_SHIFTS, x_edt, q_edt,l_t,b_e, o_e, f_e, p_edt, s_dt, u_dt, v_dt);
     int current_score;
-    int tabu_size = (x_edt.size() * x_edt[0].size() * x_edt[0][0].size())/2 + (x_edt.size() * x_edt[0].size() * x_edt[0][0].size())/4;
+    int tabu_size = (x_edt.size() * x_edt[0].size() * x_edt[0][0].size())/2;
     if (argc == 4){
         tabu_size = stoi(argv[3]);
     }
