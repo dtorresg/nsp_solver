@@ -201,9 +201,6 @@ int captureNumber(string myText,int currentFlag){
 int eval_func(int days, vector<SecShift> SECTION_SHIFTS, vector<vector<vector<int>>> x_edt, vector<vector<vector<int>>> q_edt, vector<int> l_t, vector<vector<vector<int>>> p_edt,vector<vector<int>> s_dt,vector<vector<int>> u_dt, vector<vector<int>> v_dt){
     int suma1 = 0;
     int suma2 = 0;
-    int suma3 = 0;
-    int suma4 = 0;
-    int suma5 = 0;
     int temp = 0;
     vector<vector<int>> y_dt(days,vector<int>(SECTION_SHIFTS.size()));//below
     vector<vector<int>> z_dt(days,vector<int>(SECTION_SHIFTS.size()));//above
@@ -233,7 +230,7 @@ int eval_func(int days, vector<SecShift> SECTION_SHIFTS, vector<vector<vector<in
             suma2 = suma2 + (y_dt[j][k]*u_dt[j][k]) + (z_dt[j][k]*v_dt[j][k]);
         }
     }
-    return suma1 + suma2 + suma3;
+    return suma1 + suma2;
 }
 
 vector<vector<vector<int>>> movimiento(int empleado, int dia, int turno, vector<vector<vector<int>>> x_edt){
