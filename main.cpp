@@ -277,7 +277,7 @@ int main(int argc, char const *argv[]) {
                 test++;
             }else{
                 if (test < o_e[i] && test != 0){
-                    global_best_score = global_best_score - (o_e[i] - test)*1000;
+                    global_best_score = global_best_score - (o_e[i] - test)*1100;
                 }
                 test = 0;
             }
