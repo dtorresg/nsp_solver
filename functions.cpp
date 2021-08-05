@@ -243,6 +243,7 @@ int eval_func(int days, vector<SecShift> SECTION_SHIFTS, vector<vector<vector<in
         if (b_e[i] > temp){
             suma3 = suma3 + (b_e[i] - temp)*1000;
         }
+        temp = 0;
     }
     temp = 0;
     for (int i = 0; i < x_edt.size(); i++){

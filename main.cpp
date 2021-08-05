@@ -310,6 +310,7 @@ int main(int argc, char const *argv[]) {
         if (b_e[i] > test){
             cout << "- No cumple con el mínimo de minutos de trabajo para el empleado " << SECTION_STAFF[i].id << endl;
         }
+        test = 0;
     }
     test = 0;
     for (int i = 0; i < global_solution.size(); i++){
