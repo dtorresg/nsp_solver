@@ -185,7 +185,6 @@ int main(int argc, char const *argv[]) {
         tabu_size = stoi(argv[3]);
     }
     int iter = stoi(argv[2]);
-    cout << iter << " " << tabu_size << endl;
     auto begin = std::chrono::high_resolution_clock::now();
 
     //CONSTRUCCION DE SOLUCION INICIAL CON GREEDY
