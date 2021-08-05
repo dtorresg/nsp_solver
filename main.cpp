@@ -210,7 +210,6 @@ int main(int argc, char const *argv[]) {
         x_edt = next_move;
     }
     cout << "aca" << endl;
-    global_best_score = eval_func(days, SECTION_SHIFTS, global_solution, q_edt,l_t,b_e, o_e, f_e, p_edt, s_dt, u_dt, v_dt);
     cout << "aca2" << endl;
     // TABUU SEARCH
     for (int n = 0; n < iter; n++){
