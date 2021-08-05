@@ -236,7 +236,7 @@ int main(int argc, char const *argv[]) {
         auto now =  std::chrono::high_resolution_clock::now();
         auto timeout = std::chrono::duration_cast<std::chrono::seconds>(now - begin);
         if (timeout.count() >= 7200){
-            cout << "timeout" << endl;
+            cout << "Timeout: Limite de 2 Horas Superado" << endl;
             break;
         }
     }
