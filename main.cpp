@@ -266,7 +266,7 @@ int main(int argc, char const *argv[]) {
             }
         }
         if (b_e[i] > test){
-            global_best_score = global_best_score - (b_e[i] - test)*1000;
+            global_best_score = global_best_score - (b_e[i] - test)*500;
         }
         test = 0;
     }
@@ -277,7 +277,7 @@ int main(int argc, char const *argv[]) {
                 test++;
             }else{
                 if (test < o_e[i] && test != 0){
-                    global_best_score = global_best_score - (o_e[i] - test)*1100;
+                    global_best_score = global_best_score - (o_e[i] - test)*500;
                 }
                 test = 0;
             }
@@ -290,7 +290,7 @@ int main(int argc, char const *argv[]) {
                 test++;
             }else{
                 if (test < f_e[i] && test != 0){
-                    global_best_score = global_best_score - (f_e[i] - test)*1000;
+                    global_best_score = global_best_score - (f_e[i] - test)*500;
                 }
                 test = 0;
             }

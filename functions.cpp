@@ -241,7 +241,7 @@ int eval_func(int days, vector<SecShift> SECTION_SHIFTS, vector<vector<vector<in
             }
         }
         if (b_e[i] > temp){
-            suma3 = suma3 + (b_e[i] - temp)*1000;
+            suma3 = suma3 + (b_e[i] - temp)*500;
         }
         temp = 0;
     }
@@ -252,7 +252,7 @@ int eval_func(int days, vector<SecShift> SECTION_SHIFTS, vector<vector<vector<in
                 temp++;
             }else{
                 if (temp < o_e[i] && temp != 0){
-                    suma4 = suma4 + (o_e[i] - temp)*1100;
+                    suma4 = suma4 + (o_e[i] - temp)*500;
                 }
                 temp = 0;
             }
@@ -265,7 +265,7 @@ int eval_func(int days, vector<SecShift> SECTION_SHIFTS, vector<vector<vector<in
                 temp++;
             }else{
                 if (temp < f_e[i] && temp != 0){
-                    suma5 = suma5 + (f_e[i] - temp)*1000;
+                    suma5 = suma5 + (f_e[i] - temp)*500;
                 }
                 temp = 0;
             }
